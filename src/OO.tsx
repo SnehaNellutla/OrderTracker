@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Icon, IconButton, Modal, TextField } from '@mui/material';
-import { Add, Delete, Search, Edit, SearchOutlined } from '@mui/icons-material';
+import { Button, FormControl, Icon, IconButton, InputLabel, MenuItem, Modal, Select, SelectChangeEvent, TextField } from '@mui/material';
+import { Add, Delete, Search, Edit, } from '@mui/icons-material';
 import axios from 'axios';
 
 import { Order } from './types';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from './store';
-
+import './App.css';
+import { setContent, setIsCreating } from './draftSlice';
 export const OO: any = () => {
 
+  const dispatch= useDispatch();
+  const {isCreating, content}=useSelector((state:any)=>state.draft);
   const [isEdit, setIsEdit] = useState(false);
   const [orders, setOrders] = useState<Order[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
@@ -16,6 +19,7 @@ export const OO: any = () => {
   const [searchText, setSearchText] = useState('');
   const [filterorderType, setOrderType] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchClick, setSearchClick]=useState(false);
   const [newOrder, setNewOrder] = useState({
     createdByUserName: '',
     orderType: '',
@@ -36,11 +40,35 @@ export const OO: any = () => {
   
     fetchData();
   }, []);
-  const handleSearchChange = () => {
-    // setSearchText(event.target.value);
+  const handleSearchChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+    setSearchText(event.target.value);
   };
 
-  const handleOrderTypeChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  useEffect(()=>{
+
+    if(isCreating){
+     
+      dispatch(setContent(newOrder));
+    }
+          
+  }, [isCreating])
+
+  useEffect(()=>{
+        if(content!=null){
+          
+          handleNewOrderSubmit();
+
+        }
+
+  },[content])
+
+  console.log("Content", content);
+
+  const handleSearchClick=()=>{
+    setSearchClick(!searchClick)
+  }
+
+  const handleOrderTypeChange = (event: SelectChangeEvent<string>) => {
     setOrderType(event.target.value as string);
   };
 
@@ -112,6 +140,7 @@ export const OO: any = () => {
   const handleNewOrderSubmit = async () => {
     console.log(newOrder);
   debugger 
+  
     try {
       let response: any;
       
@@ -126,6 +155,7 @@ export const OO: any = () => {
         setNewOrder({createdByUserName: '', orderType: '', customerName: '' });
         setIsModalOpen(false);
         console.log(response, newOrder);
+        dispatch(setIsCreating(false));
      
       }
       
@@ -162,11 +192,20 @@ export const OO: any = () => {
       <div style={{ display: 'flex', alignItems: 'center'}}> 
         
       <div className="search">
-  {/* <input type="text" placeholder="Search" value=/>
+  {/* <input type="text" placeholder="Search" value={searchText} onChange={handleSearchChange}/>
   <Icon className="icon" >
     <Search />
   </Icon> */}
-               <TextField
+  <TextField
+        label="Search"
+        variant="outlined"
+        value={searchText}
+        onChange={handleSearchChange}
+      />
+      <Button variant="contained" color="primary" onClick={handleSearchClick}>
+        <Search />
+      </Button>
+               {/* <TextField
                 fullWidth
                 id="standard-bare"
                 value={searchText}
@@ -178,28 +217,32 @@ export const OO: any = () => {
                     </IconButton>
                   ),
                 }}
-              />
+              /> */}
 </div>
-        <button onClick={handleCreateOrderClick}>
-          <Icon>
-            <Add />
-          </Icon>
-          Create Order
-        </button>
-        <button onClick={handleDeleteSelectedClick}>
-          <Icon>
-            <Delete />
-          </Icon>
-          Delete Selected
-        </button>
-        <select value={filterorderType} onChange={handleOrderTypeChange}>
-          <option value="">All Orders</option>
-          <option value="Standard">Standard</option>
-          <option value="SaleOrder">Sale Order</option>
-          <option value="PurchaseOrder">Purchase Order</option>
-          <option value="TransferOrder">Transfer Order</option>
-          <option value="ReturnOrder">Return Order</option>
-        </select>
+       
+        <Button className="button" variant="contained" endIcon={ <Add />} onClick={handleCreateOrderClick}>
+        Create Order
+</Button>
+        <Button className="button" variant="contained" endIcon={ <Delete />} onClick={handleDeleteSelectedClick}>
+        Delete Selected
+</Button>
+<FormControl sx={{ m: 1, minWidth: 160}}>
+<InputLabel id="demo-simple-select-helper-label">Order Type</InputLabel>
+        <Select
+          labelId="demo-simple-select-helper-label"
+          id="demo-simple-select-helper"
+          value={filterorderType}
+          label="Order Type"
+          onChange={handleOrderTypeChange}
+        >
+           <MenuItem value="">All Orders</MenuItem>
+          <MenuItem value="Standard">Standard</MenuItem>
+          <MenuItem value="SaleOrder">Sale Order</MenuItem>
+          <MenuItem value="PurchaseOrder">Purchase Order</MenuItem>
+          <MenuItem value="TransferOrder">Transfer Order</MenuItem>
+          <MenuItem value="ReturnOrder">Return Order</MenuItem>
+        </Select>
+        </FormControl>
       </div>
       <table>
         <thead>
@@ -230,14 +273,21 @@ export const OO: any = () => {
                 <td>{order.customerName}</td>
                 <td>
               
-                <Icon onClick={() => {
+                {/* <Icon onClick={() => {
   setSelectedOrder(order);
   setIsModalOpen(true);
   setIsEdit(!isEdit);
 }}>
+   <Edit />
+</Icon> */}
+  <IconButton aria-label="delete" onClick={() => {
+  setSelectedOrder(order);
+  setIsModalOpen(true);
+  setIsEdit(!isEdit);
+}} >
   <Edit />
-</Icon>
-    
+</IconButton>
+ 
                 </td>
               
               </tr>
@@ -282,7 +332,7 @@ export const OO: any = () => {
                               </Button></>
       
       ):  
-      <><Button variant="contained" color="primary" onClick={handleNewOrderSubmit}>Create Order</Button><Button variant="contained" onClick={handleModalClose} style={{ marginLeft: 8 }}>
+      <><Button variant="contained" color="primary" onClick={()=>{dispatch(setIsCreating(true))}}>Create Order</Button><Button variant="contained" onClick={handleModalClose} style={{ marginLeft: 8 }}>
                               Cancel
                           </Button></>
       }
