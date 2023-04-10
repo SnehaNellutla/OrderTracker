@@ -79,25 +79,7 @@ input[type="text"] {
   background-color: white;
   border: 1px solid #ddd;
 }
-.search {
-  display: flex;
-  align-items: center;
-  position: relative;
-  margin-right: 16px;
-}
 
-.search input {
-  padding-right: 2rem; /* add padding to make room for icon */
-  margin-right: 8px;
-}
-
-.search .icon {
-  position: absolute;
-  right: 0.5rem; /* adjust position as needed */
-  cursor: pointer;
-  background-color: #0077ff;
-  height: 100%;
-}
 thead th {
   background-color: white;
 }
@@ -115,4 +97,12 @@ thead th {
 .css-wb57ya-MuiFormControl-root-MuiTextField-root {
   width: 20% !important;
   margin-right: 16px !important;
+}
+
+button.MuiButtonBase-root.MuiIconButton-root.MuiIconButton-sizeMedium.css-78trlr-MuiButtonBase-root-MuiIconButton-root {
+  color: black !important;
+}
+
+.css-154xyx0-MuiInputBase-root-MuiOutlinedInput-root {
+  padding-right: 0 !important;
 }
