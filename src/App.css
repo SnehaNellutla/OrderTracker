@@ -111,3 +111,8 @@ thead th {
 .css-78trlr-MuiButtonBase-root-MuiIconButton-root {
   color: white !important;
 }
+
+.css-wb57ya-MuiFormControl-root-MuiTextField-root {
+  width: 20% !important;
+  margin-right: 16px !important;
+}
