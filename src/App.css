@@ -1,38 +1,102 @@
-.App {
-  text-align: center;
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 20px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+thead {
+  background-color: #f1f1f1;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+th, td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  border-top: 1px solid #ddd;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+th:first-child, td:first-child {
+  padding-left: 20px;
+}
+
+th:last-child, td:last-child {
+  padding-right: 20px;
+}
+
+tbody tr:hover {
+  background-color: #f5f5f5;
+}
+
+tbody td:first-child {
+  padding-left: 20px;
+}
+
+tbody td:last-child {
+  padding-right: 20px;
+}
+
+button {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  margin-right: 8px;
+  padding: 8px 16px;
+  background-color: #0077ff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: all 0.3s ease;
 }
 
-.App-link {
-  color: #61dafb;
+button:hover {
+  background-color: #0059b3;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+select {
+  padding: 8px 16px;
+  background-color: white;
+  border: 1px solid #ddd;
+
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
 }
+
+input[type="text"] {
+  padding: 8px 16px;
+  
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+
+  background-color: white;
+  border: 1px solid #ddd;
+}
+.search {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.search input {
+  padding-right: 2rem; /* add padding to make room for icon */
+  margin-right: 8px;
+}
+
+.search .icon {
+  position: absolute;
+  right: 0.5rem; /* adjust position as needed */
+  cursor: pointer;
+  background-color: #0077ff;
+  height: 100%;
+}
+thead th {
+  background-color: white;
+}
+
+/* buttons */
+
